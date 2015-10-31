@@ -46,12 +46,14 @@ int main(int argc, char *argv[]) {
 
 	n = read(sockfd, buffer, 4);
 	int id_player = *((unsigned int*)buffer); // id-ul jucatorului
-	
+
 	n = read(sockfd, buffer, 20);
 
 	bool is_aggressive;
 	int crt_move, max_move, aggressive, N, M;
 	is_aggressive = get_info(buffer, crt_move, max_move, aggressive, N, M);
+
+//	fprintf(stdout, "%d %d %d %d %d\n", crt_move, max_move, aggressive, N, M);
 
 	n = read(sockfd, buffer, N * M * 4);
 	player players[2];

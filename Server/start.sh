@@ -1,5 +1,3 @@
-rm server
-cp server.new server
 chmod 777 server
 while true
 do

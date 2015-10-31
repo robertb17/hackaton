@@ -107,6 +107,7 @@ pair<short int, short int> bfs(game_board map[32][32], player p1, player p2, sho
 	*/
 }
 
+/*
 int main(){
 
 	FILE *fin = fopen("date.in", "rt");
@@ -133,4 +134,4 @@ int main(){
 	
 	bfs(map, p1, p2, m, n);	
 	return 0;
-}
+} */

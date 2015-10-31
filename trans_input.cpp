@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 void handle_player(player* x, char* p, int i, int j)
 {
@@ -16,42 +17,45 @@ void handle_player(player* x, char* p, int i, int j)
 	}
 }
 
-int* get_new_int(char* s, int l)
+int get_new_int(char* s, int l)
 {
 	//asumming little endian
-	int* p = (int*) (s+ l - 4);
-	s[l-4] = '\0';
-	return p;
+	char* p = s + l - 1;
+	// return p;
+	int val = 0;
+	for(int i = 0; i <= 3; i++) {
+		val += (int)(*((p - i))) * pow(2,8 * (3 - i));
+	}
+	return val;
 
 }
 
 char* get_new_char(char* s, int l)
 {
 	//asumming little endian
-	char* p = (char*) (s + l - 1);
-	s[l-1] = '\0';
+	char* p = s++;
 	return p;
 }
 
 bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, int& M)
 {
 	printf("%s\n", s);
-	int* p = get_new_int(s, strlen(s));
-	crt_move = *p;
+	int p = get_new_int(s, 20);
+	N = p;
 
 	printf("%s\n", s);
 	
-	p = get_new_int(s, strlen(s));
-	aggressive = *p;
+	p = get_new_int(s, 16);
+	M = p;
 
-	p = get_new_int(s, strlen(s));
-	max_move = *p;
+	p = get_new_int(s, 12);
+	max_move = p;
 
-	p = get_new_int(s, strlen(s));
-	N = *p;
+	p = get_new_int(s, 8);
+	aggressive = p;
 
-	p = get_new_int(s, strlen(s));
-	M = *p;
+	p = get_new_int(s, 4);
+	crt_move = p;
 
 	return (crt_move >= aggressive) ? true : false;
 }
@@ -64,6 +68,7 @@ game_board** trans_input(char* s, player* players, int N, int M)
 		for(int j = 0; j < M; j++) {
 			char* pp = get_new_char(s, strlen(s));
 			if(*pp != 0) {
+				printf("%d %d\n", i, j);
 				handle_player(players, pp, i, j);
 			}
 			pp = get_new_char(s, strlen(s)); 
