@@ -11,7 +11,7 @@
 int main(int argc, char *argv[]) {
 
 	int sockfd, portno, n;
-	char buffer[256];
+	char buffer[4300];
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
 

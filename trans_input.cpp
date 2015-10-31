@@ -85,7 +85,8 @@ game_board** trans_input(char* s, player* players, int N, int M)
 
 			pp = get_new_char(s); 
 			s++;
-			board[i][j].has_bomb =	*pp;	
+			board[i][j].has_bomb = *pp;
+			//printf("%d %d: %d %d %d\n", i, j, (int)board[i][j].is_wall, board[i][j].on_fire, board[i][j].has_bomb);	
 		}
 	}
 
