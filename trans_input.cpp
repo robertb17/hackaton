@@ -17,7 +17,7 @@ void handle_player(player* x, char* p, int i, int j)
 	}
 }
 
-int* get_new_int(char* s)//, int l)
+int get_new_int(char* s, int l)
 {
 	//asumming little endian
 	int* p = (int*) (s+ l - 4);
@@ -40,22 +40,22 @@ char* get_new_char(char* s, int l)
 bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, int& M)
 {
 	printf("%s\n", s);
-	int* p = get_new_int(s, 20);
-	crt_move = *p;
+	int p = get_new_int(s, 20);
+	crt_move = p;
 
 	printf("%s\n", s);
 	
 	p = get_new_int(s, 16);
-	aggressive = *p;
+	aggressive = p;
 
 	p = get_new_int(s, 12);
-	max_move = *p;
+	max_move = p;
 
 	p = get_new_int(s, 8);
-	N = *p;
+	N = p;
 
 	p = get_new_int(s, 4);
-	M = *p;
+	M = p;
 
 	return (crt_move >= aggressive) ? true : false;
 }
