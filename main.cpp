@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <cstring>
+#include "data_str.h"
 
 int main(int argc, char *argv[]) {
 
@@ -43,8 +44,18 @@ int main(int argc, char *argv[]) {
 		  sizeof(serv_addr)) < 0)
 		fprintf(stderr, "ERROR, conection failed");
 
-	n = write(sockfd, buffer, 8);
+	n = read(sockfd, buffer, 4);
+	int id_player = *((unsigned int*)buffer); // id-ul jucatorului
+	
+	n = read(sockfd, buffer, 20);
 
+	bool is_aggressive;
+	int crt_move, max_move, aggressive, N, M;
+	is_aggressive = get_info(buffer, crt_move, max_move, aggressive, N, M);
+
+	n = read(sockfd, buffer, N * M * 4);
+	player players[2];
+	game_board **board = trans_input(buffer, players, N, M);
 	
 	return 0;
 }

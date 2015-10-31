@@ -1,5 +1,5 @@
 compile:
-	g++ main.cpp
+	g++ main.cpp trans_input.cpp
 run:
 	./a.out
 clean:
