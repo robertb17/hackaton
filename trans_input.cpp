@@ -20,7 +20,7 @@ void handle_player(player* x, char* p, int i, int j)
 int get_new_int(char* s, int l)
 {
 	//asumming little endian
-	int* p = (int*) s;//+ l - 4);
+	int* p = (int*) (s+ l - 4);
 	// return p;
 	int val = 0;
 	for(int i = 0; i < 3; i++) {
