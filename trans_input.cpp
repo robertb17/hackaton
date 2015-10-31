@@ -33,7 +33,7 @@ int get_new_int(char* s, int l)
 char* get_new_char(char* s, int l)
 {
 	//asumming little endian
-	char* p = s + l - 1;
+	char* p = s++;
 	return p;
 }
 
@@ -41,12 +41,12 @@ bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, in
 {
 	printf("%s\n", s);
 	int p = get_new_int(s, 20);
-	M = p;
+	N = p;
 
 	printf("%s\n", s);
 	
 	p = get_new_int(s, 16);
-	N = p;
+	M = p;
 
 	p = get_new_int(s, 12);
 	max_move = p;
