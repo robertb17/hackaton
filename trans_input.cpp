@@ -33,7 +33,7 @@ int get_new_int(char* s, int l)
 char* get_new_char(char* s, int l)
 {
 	//asumming little endian
-	char* p = (char*) (s + l - 1);
+	char* p = s + l - 1;
 	return p;
 }
 
@@ -68,6 +68,7 @@ game_board** trans_input(char* s, player* players, int N, int M)
 		for(int j = 0; j < M; j++) {
 			char* pp = get_new_char(s, strlen(s));
 			if(*pp != 0) {
+				printf("%d %d\n", i, j);
 				handle_player(players, pp, i, j);
 			}
 			pp = get_new_char(s, strlen(s)); 
