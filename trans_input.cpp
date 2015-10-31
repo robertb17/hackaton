@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 void handle_player(player* x, char* p, int i, int j)
 {
@@ -16,12 +17,16 @@ void handle_player(player* x, char* p, int i, int j)
 	}
 }
 
-int* get_new_int(char* s, int l)
+int* get_new_int(char* s)//, int l)
 {
 	//asumming little endian
 	int* p = (int*) (s+ l - 4);
-	s[l-4] = '\0';
-	return p;
+	// return p;
+	int val = 0;
+	for(int i = 0; i < 3; i++) {
+		val += *((int*)((char*)(p + i))) * pow(2,8 * i);
+	}
+	return val;
 
 }
 
@@ -29,7 +34,6 @@ char* get_new_char(char* s, int l)
 {
 	//asumming little endian
 	char* p = (char*) (s + l - 1);
-	s[l-1] = '\0';
 	return p;
 }
 
