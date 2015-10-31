@@ -30,10 +30,10 @@ int get_new_int(char* s, int l)
 
 }
 
-char* get_new_char(char* s, int l)
+char* get_new_char(char* s)
 {
 	//asumming little endian
-	char* p = s++;
+	char* p = s;
 	return p;
 }
 
@@ -66,19 +66,25 @@ game_board** trans_input(char* s, player* players, int N, int M)
 	for(int i = 0; i < N; i++) {
 		board[i] = (game_board*) malloc(sizeof(game_board) * M);
 		for(int j = 0; j < M; j++) {
-			char* pp = get_new_char(s, strlen(s));
+			char* pp = get_new_char(s);
+			s++;
+
 			if(*pp != 0) {
 				printf("%d %d\n", i, j);
 				handle_player(players, pp, i, j);
 			}
-			pp = get_new_char(s, strlen(s)); 
+			pp = get_new_char(s); 
+			s++;
+
 			board[i][j].is_wall = *pp;
 			board[i][j].danger_level = 0;
 
-			pp = get_new_char(s, strlen(s)); 
+			pp = get_new_char(s); 
+			s++;
 			board[i][j].on_fire = *pp;
 
-			pp = get_new_char(s, strlen(s)); 
+			pp = get_new_char(s); 
+			s++;
 			board[i][j].has_bomb =	*pp;	
 		}
 	}
