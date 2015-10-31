@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	memset( &serv_addr, 0, sizeof(serv_addr));
+	memset( buffer, 0, 256);
 	serv_addr.sin_family = AF_INET;
 	bcopy((char *)server->h_addr,
 	      (char *)&serv_addr.sin_addr.s_addr,
@@ -42,7 +43,9 @@ int main(int argc, char *argv[]) {
 		  sizeof(serv_addr)) < 0)
 		fprintf(stderr, "ERROR, conection failed");
 
+	n = write(sockfd, buffer, 8);
 
+	
 	return 0;
 }
 
