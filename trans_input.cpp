@@ -1,6 +1,7 @@
 #include "data_str.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void handle_player(player* x, char* p, int i, int j)
 {
@@ -34,8 +35,11 @@ char* get_new_char(char* s, int l)
 
 bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, int& M)
 {
+	printf("%s\n", s);
 	int* p = get_new_int(s, strlen(s));
 	crt_move = *p;
+	
+	printf("%s\n", s);
 	
 	p = get_new_int(s, strlen(s));
 	aggressive = *p;
@@ -54,8 +58,6 @@ bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, in
 
 game_board** trans_input(char* s, player* players, int N, int M)
 {
-	
-
 	game_board** board = (game_board**) malloc(sizeof(game_board*) * N);
 	for(int i = 0; i < N; i++) {
 		board[i] = (game_board*) malloc(sizeof(game_board) * M);
