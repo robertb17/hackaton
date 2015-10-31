@@ -36,21 +36,21 @@ char* get_new_char(char* s, int l)
 bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, int& M)
 {
 	printf("%s\n", s);
-	int* p = get_new_int(s, strlen(s));
+	int* p = get_new_int(s, 20);
 	crt_move = *p;
 
 	printf("%s\n", s);
 	
-	p = get_new_int(s, strlen(s));
+	p = get_new_int(s, 16);
 	aggressive = *p;
 
-	p = get_new_int(s, strlen(s));
+	p = get_new_int(s, 12);
 	max_move = *p;
 
-	p = get_new_int(s, strlen(s));
+	p = get_new_int(s, 8);
 	N = *p;
 
-	p = get_new_int(s, strlen(s));
+	p = get_new_int(s, 4);
 	M = *p;
 
 	return (crt_move >= aggressive) ? true : false;
