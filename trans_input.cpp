@@ -23,7 +23,7 @@ int get_new_int(char* s, int l)
 	int* p = (int*) (s+ l - 4);
 	// return p;
 	int val = 0;
-	for(int i = 0; i < 3; i++) {
+	for(int i = 0; i <= 3; i++) {
 		val += (int)(*((char*)(p + i))) * pow(2,8 * i);
 	}
 	return val;
@@ -41,21 +41,21 @@ bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, in
 {
 	printf("%s\n", s);
 	int p = get_new_int(s, 20);
-	crt_move = p;
+	M = p;
 
 	printf("%s\n", s);
 	
 	p = get_new_int(s, 16);
-	aggressive = p;
+	N = p;
 
 	p = get_new_int(s, 12);
 	max_move = p;
 
 	p = get_new_int(s, 8);
-	N = p;
+	aggressive = p;
 
 	p = get_new_int(s, 4);
-	M = p;
+	crt_move = p;
 
 	return (crt_move >= aggressive) ? true : false;
 }
