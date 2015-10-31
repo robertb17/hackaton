@@ -18,7 +18,7 @@ bool on_board(short int x, short int y, short int m, short int n){
 }
 
 /*matrice, player1, player2, nr linii, nr coloana*/
-void bfs(game_board map[32][32], player p1, player p2, short int m, short int n){
+pair<short int, short int> bfs(game_board map[32][32], player p1, player p2, short int m, short int n){
 		
 	
 	/*vectori de vecini*/
@@ -82,13 +82,17 @@ void bfs(game_board map[32][32], player p1, player p2, short int m, short int n)
 			}		
 		}
 
-		reverse(path.begin(), path.end());
+		/*reverse(path.begin(), path.end());
 		for(unsigned int i = 0; i < path.size(); i++){
 			printf("(%hd, %hd) ", path[i].first, path[i].second);
 		}
-		printf("\n");
+		printf("\n");*/
+
+		return path[path.size() - 1];
 	}else{
-		printf("Nu s-a ajuns la destinatie\n");
+		//printf("Nu s-a ajuns la destinatie\n");
+		pair<short int, short int> move = make_pair(p1.pos_x, p1.pos_y);	
+		return move;	
 	}
 	
 	/*
