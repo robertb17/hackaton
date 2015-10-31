@@ -24,7 +24,7 @@ int get_new_int(char* s, int l)
 	// return p;
 	int val = 0;
 	for(int i = 0; i < 3; i++) {
-		val += *((int*)((char*)(p + i))) * pow(2,8 * i);
+		val += (int)(*((char*)(p + i))) * pow(2,8 * i);
 	}
 	return val;
 
