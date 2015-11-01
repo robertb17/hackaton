@@ -11,14 +11,14 @@ const short int mov[10][5] = {
 	{0, 1, 0, 0, 0},	
 	{0, 0, 1, 0, 0},
 	{0, 0, 0, 1, 0},
-	{0, 0, 0, 0, 1},
-	{1, 0, 0, 0, 1},
-	{0, 1, 0, 0, 1},
-	{0, 0, 1, 0, 1},
-	{0, 0, 0, 1, 1}
+	{0, 0, 0, 0, 1}
+	//{1, 0, 0, 0, 1},
+	//{0, 1, 0, 0, 1},
+	//{0, 0, 1, 0, 1},
+	//{0, 0, 0, 1, 1}
 };
 
-
+/*veridica daca punctul e pe harta*/
 bool on_board(int x, int y, int M, int N){
 	if(x >= 0 && x < N)
 		if(y >= 0 && y  < M)
@@ -27,7 +27,7 @@ bool on_board(int x, int y, int M, int N){
 	return false;
 }
 
-
+/*verifica daca mutarea e posibila*/
 bool is_possible(game_board** board, int x, int y, int N, int M)
 {
 
@@ -41,6 +41,7 @@ bool is_possible(game_board** board, int x, int y, int N, int M)
 	return false;
 }
 
+/*updateaza casutele dupa explozie*/
 void update_flames(game_board** board, int x, int y) {
 	for(int i = 0; i < 3; i++) {
 
@@ -86,8 +87,10 @@ void update_flames(game_board** board, int x, int y) {
 	}
 }
 
+/*creeaza o harta care e un update al hartii primite */
 game_board** update_board(game_board** board, int N, int M)
 {
+	
 	game_board** new_board = (game_board**) malloc(sizeof(game_board*) * N);
 	for (int i = 0; i < N ; i++) {
 		board[i] = (game_board*) malloc(sizeof(game_board) * M);
@@ -115,11 +118,11 @@ game_board** update_board(game_board** board, int N, int M)
 	return new_board;
 }
 
-
+/*calculeaza arborele*/
 void calc_arbore(nod* n_crt, game_board** board, int N, int M, int pas)
 {
 	game_board** new_board = update_board(board, N, M);
-	if(pas == 2) {
+	if(pas >= 1) {
 		//eff = 0 cuz ded
 		if( board[n_crt->p1.pos_x][n_crt->p1.pos_y].on_fire > 0 ) {
 			n_crt->eff1 = 0;
@@ -149,7 +152,7 @@ void calc_arbore(nod* n_crt, game_board** board, int N, int M, int pas)
 		
 		//iteram prin matricea movement
 		for(int i = 0; i < 10; i++) {
-			for(int j = 0; j < 10; j++) {
+			for(int j = 0; j < 6; j++) {
 				nod *n = new nod;
 				n->p1.pos_x = n_crt->p1.pos_x - mov[i][0] + mov[i][1];
 				n->p1.pos_y = n_crt->p1.pos_y - mov[i][2] + mov[i][3];
@@ -158,11 +161,11 @@ void calc_arbore(nod* n_crt, game_board** board, int N, int M, int pas)
 				n->p2.pos_y = n_crt->p2.pos_y - mov[j][2] + mov[j][3];
 
 		
-				fprintf(stderr, "%d %d %d %d\n",n->p1.pos_x, n->p1.pos_y, n->p2.pos_x, n->p2.pos_y);
+				//fprintf(stderr, "%d %d %d %d\n",n->p1.pos_x, n->p1.pos_y, n->p2.pos_x, n->p2.pos_y);
 
 				if(is_possible(new_board, n->p1.pos_x, n->p1.pos_y, N, M) &&
 				   is_possible(new_board, n->p2.pos_x, n->p2.pos_y, N, M)) {
-					fprintf(stderr, "true\n");
+					//fprintf(stderr, "true\n");
 					n_crt->v_nod.push_back(n);
 					if(mov[i][4] == 1){
 						new_board[n_crt->p1.pos_x][n_crt->p1.pos_y].time_left_bomb = 10;
@@ -172,21 +175,23 @@ void calc_arbore(nod* n_crt, game_board** board, int N, int M, int pas)
 					}
 
 				}
-				fprintf(stderr,"%d %d\n", i, j);
+				//fprintf(stderr,"%d %d\n", i, j);
 			
 				
 				//delete[] n;
-				fprintf(stderr, "%lu\n", n_crt->v_nod.size());
+				//fprintf(stderr, "%lu\n", n_crt->v_nod.size());
 			}
 		}
-
+ 
 		//solve nodes
 		for(size_t i = 0; i < n_crt->v_nod.size(); i++) {
-			calc_arbore(n_crt->v_nod[i], new_board, N, M, ++pas);
+			fprintf(stderr, "%lu %lu \n", i, n_crt->v_nod.size());
+			calc_arbore(n_crt->v_nod[i], new_board, N, M, pas + 1);
+		
 		}
 
 		//calc best solution
-		free(new_board);
+		//free(new_board);
 		
 		if (n_crt->v_nod.size()){	
 			int min_eff1 = n_crt->v_nod[0]->eff1;
@@ -209,24 +214,30 @@ void calc_arbore(nod* n_crt, game_board** board, int N, int M, int pas)
 	}
 }
 
+/*returneaza mutarea cea mai eficienta*/
 player get_movement(nod *n)
 {
-	int index = 0;
-	int max_eff1 = n->v_nod[0]->eff1;
-	int min_eff2 = n->v_nod[0]->eff2;
-	for(size_t i = 1; i < n->v_nod.size(); i++) {
-		if(max_eff1 < n->v_nod[i]->eff1) {
-			max_eff1 = n->v_nod[i]->eff1;
-			index = i;
-			min_eff2 = n->v_nod[i]->eff2;
-		} else if (max_eff1 == n->v_nod[i]->eff1) {
-			if(min_eff2 < n->v_nod[i]->eff2) {
+
+	if(n->v_nod.size()){
+		int index = 0;
+		int max_eff1 = n->v_nod[0]->eff1;
+		int min_eff2 = n->v_nod[0]->eff2;
+		for(size_t i = 1; i < n->v_nod.size(); i++) {
+			if(max_eff1 < n->v_nod[i]->eff1) {
+				max_eff1 = n->v_nod[i]->eff1;
 				index = i;
 				min_eff2 = n->v_nod[i]->eff2;
+			} else if (max_eff1 == n->v_nod[i]->eff1) {
+				if(min_eff2 < n->v_nod[i]->eff2) {
+					index = i;
+					min_eff2 = n->v_nod[i]->eff2;
+				}
 			}
 		}
-	}
 
-	return n->v_nod[index]->p1;
+		return n->v_nod[index]->p1;	
+	}
+	
+	return n->p1;
 }
 

@@ -1,4 +1,3 @@
-chmod 777 server
 while true
 do
     echo "Start server"

@@ -34,12 +34,13 @@ bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, in
 {
 	//printf("%s\n", s);
 	int p = get_new_int(s, 20);
-	N = p;
+	M = p;
+	printf("%d\n", N);	
 
 	//printf("%s\n", s);
 	
 	p = get_new_int(s, 16);
-	M = p;
+	N = p;
 
 	p = get_new_int(s, 12);
 	max_move = p;
@@ -62,12 +63,14 @@ game_board** trans_input(char* s, player* players, int N, int M)
 		for(int j = 0; j < M; j++) {
 	//		char* pp = s;
 	//		pp++;
-
+			
 			if(*pp != 0) {
 	//			printf("%d %d\n", i, j);
 				handle_player(players, pp, i, j);
 			}
+
 			pp++;
+			
 			if(*pp == '\0') {
 				board[i][j].is_wall = false;
 			} else {
@@ -75,14 +78,19 @@ game_board** trans_input(char* s, player* players, int N, int M)
 			}
 
 			pp++;
-			memcpy(&board[i][j].on_fire, pp, sizeof(char));
-
-			pp++;
 			memcpy(&board[i][j].time_left_bomb, pp, sizeof(char));
+			
 			pp++;
-			printf("%d %d: %d %d %d\n", i, j, (int)board[i][j].is_wall, board[i][j].on_fire, board[i][j].time_left_bomb);
+			memcpy(&board[i][j].on_fire, pp, sizeof(char));
+	
+			pp++;
+			
+			//printf("%d %d: %d %d %d\n", i, j, (int)board[i][j].is_wall, (int)board[i][j].on_fire, (int)board[i][j].time_left_bomb);
+//			printf("%d ", (int) board[i][j].is_wall);			
 		}
+//		printf("\n");
 	}
 
 	return board;
 }
+

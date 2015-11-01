@@ -58,7 +58,15 @@ int main(int argc, char *argv[]) {
 	n = read(sockfd, buffer, N * M * 4);
 	player players[2];
 	game_board **board = trans_input(buffer, players, N, M);
-	
+
+	FILE * fout = fopen("matr.out", "w");
+	for(int i = 0; i < N; i++) {
+		for(int j = 0; j < M; j++)
+			fprintf(fout, "%d ", board[i][j].is_wall);
+		fprintf(fout, "\n");
+	}
+	fclose(fout);
+
 	nod rad;
 	rad.p1.pos_x = players[0].pos_x;
 	rad.p1.pos_y = players[0].pos_y;
@@ -67,10 +75,12 @@ int main(int argc, char *argv[]) {
 	rad.p2.pos_y = players[1].pos_y;
 
 	for(int i = 0; i < max_move; i++) {
+
+		fprintf(stderr, "%d\n", i);
 		if(crt_move != i) {
 			i = crt_move;
 		}
-		calc_arbore(&rad, board, N, M, 0);
+		calc_arbore(&rad, board, M, N, 0);
 		players[0] = get_movement(&rad);
 	}
 
