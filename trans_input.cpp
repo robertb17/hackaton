@@ -74,7 +74,11 @@ game_board** trans_input(char* s, player* players, int N, int M)
 				handle_player(players, pp, i, j);
 			}
 			pp++;
-			memcpy(&board[i][j].is_wall, pp, sizeof(char));
+			if(*pp == '\0') {
+				board[i][j].is_wall = false;
+			} else {
+				board[i][j].is_wall = true;
+			}
 
 			pp++;
 			memcpy(&board[i][j].on_fire, pp, sizeof(char));
