@@ -5,9 +5,9 @@
 #include <math.h>
 #include <string.h>
 
-void handle_player(player* x, char* p, int i, int j)
+void handle_player(player* x, char* p, int i, int j, int id_player)
 {
-	if(x[0].player_id == 0) {
+	if(*p == id_player) {
 		x[0].player_id = *((int*)p);
 		x[0].pos_x = i;
 		x[0].pos_y = j;
@@ -54,7 +54,7 @@ bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, in
 	return (crt_move >= aggressive) ? true : false;
 }
 
-game_board** trans_input(char* s, player* players, int N, int M)
+game_board** trans_input(char* s, player* players, int N, int M, int id_player)
 {
 	game_board** board = (game_board**) malloc(sizeof(game_board*) * N);
 	char* pp = s;
@@ -66,7 +66,7 @@ game_board** trans_input(char* s, player* players, int N, int M)
 			
 			if(*pp != 0) {
 	//			printf("%d %d\n", i, j);
-				handle_player(players, pp, i, j);
+				handle_player(players, pp, i, j, id_player);
 			}
 
 			pp++;
