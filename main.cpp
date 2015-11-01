@@ -7,6 +7,7 @@
 #include <netdb.h>
 #include <cstring>
 #include "data_str.h"
+#include <stdint.h>
 
 int main(int argc, char *argv[]) {
 
@@ -14,6 +15,8 @@ int main(int argc, char *argv[]) {
 	char buffer[4300];
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
+	bool is_aggressive;
+	int crt_move, max_move, aggressive, N, M;
 
 	if(argc < 3) {
 		fprintf(stderr, "usage %s hostname port", argv[0]);
@@ -49,23 +52,12 @@ int main(int argc, char *argv[]) {
 
 	n = read(sockfd, buffer, 20);
 
-	bool is_aggressive;
-	int crt_move, max_move, aggressive, N, M;
 	is_aggressive = get_info(buffer, crt_move, max_move, aggressive, N, M);
 
-//	fprintf(stdout, "%d %d %d %d %d\n", crt_move, max_move, aggressive, N, M);
 
 	n = read(sockfd, buffer, N * M * 4);
 	player players[2];
 	game_board **board = trans_input(buffer, players, N, M, id_player);
-
-/*	FILE * fout = fopen("matr.out", "w");
-	for(int i = 0; i < N; i++) {
-		for(int j = 0; j < M; j++)
-			fprintf(fout, "%d ", board[i][j].is_wall);
-		fprintf(fout, "\n");
-	}
-	fclose(fout);*/
 
 	nod rad;
 	rad.p1.pos_x = players[0].pos_x;
@@ -74,18 +66,11 @@ int main(int argc, char *argv[]) {
 	rad.p2.pos_x = players[1].pos_x;
 	rad.p2.pos_y = players[1].pos_y;
 
-	for(int i = 0; i < max_move; i++) {
-
-//		fprintf(stderr, "%d\n", i);
-		if(crt_move != i) {
-			i = crt_move;
-		}
-		calc_arbore(&rad, board, M, N, 0);
-		int next_move = get_movement(&rad);
-		sprintf(buffer, "%d%d", crt_move, next_move);
-
-		write(sockfd, buffer, 8);
-	}
+	calc_arbore(&rad, board, M, N, 0);
+	int next_move = get_movement(&rad);
+		
+	int64_t val = 0;
+	n = write(sockfd, &val, 8);
 
 	
 

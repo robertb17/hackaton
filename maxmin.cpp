@@ -19,7 +19,7 @@ const short int mov[10][5] = {
 };
 
 /*veridica daca punctul e pe harta*/
-bool on_board(int x, int y, int M, int N){
+bool on_board(int x, int y, int N, int M){
 	if(x >= 0 && x < N)
 		if(y >= 0 && y  < M)
 			return true;
