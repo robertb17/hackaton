@@ -5,4 +5,4 @@ run:
 clean:
 	rm a.out
 debug:
-	g++ -g main.cpp trans_input.cpp
+	g++ -g maxmin.cpp main.cpp trans_input.cpp

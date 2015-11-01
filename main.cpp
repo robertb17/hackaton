@@ -70,8 +70,8 @@ int main(int argc, char *argv[]) {
 		if(crt_move != i) {
 			i = crt_move;
 		}
-		calc_arbore(rad, board, N, M, 0);
-		players[0] = get_movement(rad);
+		calc_arbore(&rad, board, N, M, 0);
+		players[0] = get_movement(&rad);
 	}
 
 	

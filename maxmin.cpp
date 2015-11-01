@@ -1,6 +1,7 @@
 #include "data_str.h"
 #include <stdlib.h>
 #include <cstring>
+#include <stdio.h>
 #define INF 100
 
 
@@ -17,10 +18,23 @@ const short int mov[10][5] = {
 	{0, 0, 0, 1, 1}
 };
 
-bool is_possible(game_board** board, int x, int y)
+
+bool on_board(int x, int y, int M, int N){
+	if(x >= 0 && x < N)
+		if(y >= 0 && y  < M)
+			return true;
+
+	return false;
+}
+
+
+bool is_possible(game_board** board, int x, int y, int N, int M)
 {
+
+	if(!on_board(x, y, N, M))
+		return false;
 	if(board[x][y].is_wall == false &&
-	   board[x][y].on_fire == false &&
+	   board[x][y].on_fire == 0 &&
 	   board[x][y].time_left_bomb == 0) {
 	   	return true;
 	}
@@ -79,6 +93,7 @@ game_board** update_board(game_board** board, int N, int M)
 		board[i] = (game_board*) malloc(sizeof(game_board) * M);
 	}
 	memcpy(new_board, board, sizeof(game_board) * N * M);
+	
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < M; j++) {
 
@@ -101,32 +116,32 @@ game_board** update_board(game_board** board, int N, int M)
 }
 
 
-void calc_arbore(nod& n_crt, game_board** board, int N, int M, int pas)
+void calc_arbore(nod* n_crt, game_board** board, int N, int M, int pas)
 {
 	game_board** new_board = update_board(board, N, M);
-	if(pas == 5) {
+	if(pas == 2) {
 		//eff = 0 cuz ded
-		if( board[n_crt.p1.pos_x][n_crt.p1.pos_y].on_fire > 0 ) {
-			n_crt.eff1 = 0;
+		if( board[n_crt->p1.pos_x][n_crt->p1.pos_y].on_fire > 0 ) {
+			n_crt->eff1 = 0;
 		} else {
 			//eff = rounds till ded
-			n_crt.eff1 = board[n_crt.p1.pos_x][n_crt.p1.pos_y].time_left_bomb;
+			n_crt->eff1 = board[n_crt->p1.pos_x][n_crt->p1.pos_y].time_left_bomb;
 			
 			//maximum eff
-			if(n_crt.eff1 == 0) {
-				n_crt.eff1 = INF;
+			if(n_crt->eff1 == 0) {
+				n_crt->eff1 = INF;
 			}
 		}
 
-		if( board[n_crt.p2.pos_x][n_crt.p2.pos_y].on_fire > 0 ) {
-			n_crt.eff2 = 0;
+		if( board[n_crt->p2.pos_x][n_crt->p2.pos_y].on_fire > 0 ) {
+			n_crt->eff2 = 0;
 		} else {
 			//eff = rounds till ded
-			n_crt.eff2 = board[n_crt.p2.pos_x][n_crt.p2.pos_y].time_left_bomb;
+			n_crt->eff2 = board[n_crt->p2.pos_x][n_crt->p2.pos_y].time_left_bomb;
 			
 			//maximum eff
-			if(n_crt.eff2 == 0) {
-				n_crt.eff2 = INF;
+			if(n_crt->eff2 == 0) {
+				n_crt->eff2 = INF;
 			}
 		}
 
@@ -135,64 +150,83 @@ void calc_arbore(nod& n_crt, game_board** board, int N, int M, int pas)
 		//iteram prin matricea movement
 		for(int i = 0; i < 10; i++) {
 			for(int j = 0; j < 10; j++) {
-				nod* n = new nod[5];
-				for(int k = 0; k < 5; k++) {
-					n[k].p1.pos_x += n_crt.p1.pos_x + mov[i][0] * (-1) + mov[i][1];
-					n[k].p1.pos_y += n_crt.p1.pos_y + mov[i][2] * (-1) + mov[i][3];
+				nod *n = new nod;
+				n->p1.pos_x = n_crt->p1.pos_x - mov[i][0] + mov[i][1];
+				n->p1.pos_y = n_crt->p1.pos_y - mov[i][2] + mov[i][3];
 
-					n[k].p2.pos_x += n_crt.p2.pos_x + mov[j][0] * (-1) + mov[j][1];
-					n[k].p2.pos_y += n_crt.p2.pos_y + mov[j][2] * (-1) + mov[j][3];
+				n->p2.pos_x = n_crt->p2.pos_x - mov[j][0] + mov[j][1];
+				n->p2.pos_y = n_crt->p2.pos_y - mov[j][2] + mov[j][3];
 
-					if(is_possible(new_board, n[k].p1.pos_x, n[k].p1.pos_y)) {
-						n_crt.v_nod.push_back(n[k]);
+		
+				fprintf(stderr, "%d %d %d %d\n",n->p1.pos_x, n->p1.pos_y, n->p2.pos_x, n->p2.pos_y);
+
+				if(is_possible(new_board, n->p1.pos_x, n->p1.pos_y, N, M) &&
+				   is_possible(new_board, n->p2.pos_x, n->p2.pos_y, N, M)) {
+					fprintf(stderr, "true\n");
+					n_crt->v_nod.push_back(n);
+					if(mov[i][4] == 1){
+						new_board[n_crt->p1.pos_x][n_crt->p1.pos_y].time_left_bomb = 10;
 					}
+					if(mov[j][4] == 1){
+						new_board[n_crt->p2.pos_x][n_crt->p2.pos_y].time_left_bomb = 10;
+					}
+
 				}
-				delete n;
+				fprintf(stderr,"%d %d\n", i, j);
+			
+				
+				//delete[] n;
+				fprintf(stderr, "%lu\n", n_crt->v_nod.size());
 			}
 		}
 
 		//solve nodes
-		for(size_t i = 0; i < n_crt.v_nod.size(); i++) {
-			calc_arbore(n_crt.v_nod[i], new_board, N, M, ++pas);
+		for(size_t i = 0; i < n_crt->v_nod.size(); i++) {
+			calc_arbore(n_crt->v_nod[i], new_board, N, M, ++pas);
 		}
 
 		//calc best solution
 		free(new_board);
-		int min_eff1 = n_crt.v_nod[0].eff1;
-		int max_eff2 = n_crt.v_nod[0].eff2;
-		for (size_t i = 1; i < n_crt.v_nod.size(); i++) {
-			if(min_eff1 > n_crt.v_nod[i].eff1) {
-				min_eff1 = n_crt.v_nod[i].eff1;
+		
+		if (n_crt->v_nod.size()){	
+			int min_eff1 = n_crt->v_nod[0]->eff1;
+			int max_eff2 = n_crt->v_nod[0]->eff2;
+			for (size_t i = 1; i < n_crt->v_nod.size(); i++) {
+				if(min_eff1 > n_crt->v_nod[i]->eff1) {
+					min_eff1 = n_crt->v_nod[i]->eff1;
+				}
+				if(max_eff2 < n_crt->v_nod[i]->eff2) {
+					max_eff2 = n_crt->v_nod[i]->eff2;
+				}
 			}
-			if(max_eff2 < n_crt.v_nod[i].eff2) {
-				max_eff2 = n_crt.v_nod[i].eff2;
-			}
-		}
-		n_crt.eff1 = min_eff1;
-		n_crt.eff2 = max_eff2;
-
-		n_crt.v_nod.clear();
+			n_crt->eff1 = min_eff1;
+			n_crt->eff2 = max_eff2;
+		}else{
+			int min_eff1 = 0;
+			int max_eff1 = 0;
+		}	
+		n_crt->v_nod.clear();
 	}
 }
 
-player get_movement(nod n)
+player get_movement(nod *n)
 {
 	int index = 0;
-	int max_eff1 = n.v_nod[0].eff1;
-	int min_eff2 = n.v_nod[0].eff2;
-	for(size_t i = 1; i < n.v_nod.size(); i++) {
-		if(max_eff1 < n.v_nod[i].eff1) {
-			max_eff1 = n.v_nod[i].eff1;
+	int max_eff1 = n->v_nod[0]->eff1;
+	int min_eff2 = n->v_nod[0]->eff2;
+	for(size_t i = 1; i < n->v_nod.size(); i++) {
+		if(max_eff1 < n->v_nod[i]->eff1) {
+			max_eff1 = n->v_nod[i]->eff1;
 			index = i;
-			min_eff2 = n.v_nod[i].eff2;
-		} else if (max_eff1 == n.v_nod[i].eff1) {
-			if(min_eff2 < n.v_nod[i].eff2) {
+			min_eff2 = n->v_nod[i]->eff2;
+		} else if (max_eff1 == n->v_nod[i]->eff1) {
+			if(min_eff2 < n->v_nod[i]->eff2) {
 				index = i;
-				min_eff2 = n.v_nod[i].eff2;
+				min_eff2 = n->v_nod[i]->eff2;
 			}
 		}
 	}
 
-	return n.v_nod[index].p1;
+	return n->v_nod[index]->p1;
 }
 

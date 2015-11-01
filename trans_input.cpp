@@ -9,12 +9,12 @@ void handle_player(player* x, char* p, int i, int j)
 {
 	if(x[0].player_id == 0) {
 		x[0].player_id = *((int*)p);
-		x[0].pos_x = j;
-		x[0].pos_y = i;
+		x[0].pos_x = i;
+		x[0].pos_y = j;
 	} else {
 		x[1].player_id = *((int*)p);
-		x[1].pos_x = j;
-		x[1].pos_y = i;
+		x[1].pos_x = i;
+		x[1].pos_y = j;
 	}
 }
 

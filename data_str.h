@@ -9,7 +9,7 @@ struct player {
 struct nod {
 	short eff1;
 	short eff2;
-	std::vector<nod> v_nod;
+	std::vector<nod*> v_nod;
 	player p1;
 	player p2;
 };
@@ -23,5 +23,5 @@ struct game_board {
 void update_state(game_board );
 bool get_info(char*, int&, int&, int&, int&, int&);
 game_board** trans_input(char*, player*, int, int);
-player get_movement(nod n);
-void calc_arbore(nod&, game_board**, int, int, int);
+player get_movement(nod *n);
+void calc_arbore(nod*, game_board**, int, int, int);
