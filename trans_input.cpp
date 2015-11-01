@@ -77,7 +77,7 @@ game_board** trans_input(char* s, player* players, int N, int M)
 			s++;
 
 			board[i][j].is_wall = *pp;
-			board[i][j].danger_level = 0;
+			// board[i][j].danger_level = 0;
 
 			pp = get_new_char(s); 
 			s++;
@@ -85,7 +85,7 @@ game_board** trans_input(char* s, player* players, int N, int M)
 
 			pp = get_new_char(s); 
 			s++;
-			board[i][j].has_bomb =	*pp;	
+			board[i][j].time_left_bomb = *pp;	
 		}
 	}
 
