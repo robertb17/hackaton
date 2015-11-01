@@ -11,7 +11,7 @@
 int main(int argc, char *argv[]) {
 
 	int sockfd, portno, n;
-	char buffer[256];
+	char buffer[4300];
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
 
@@ -59,6 +59,23 @@ int main(int argc, char *argv[]) {
 	player players[2];
 	game_board **board = trans_input(buffer, players, N, M);
 	
+	nod rad;
+	rad.p1.pos_x = players[0].pos_x;
+	rad.p1.pos_y = players[0].pos_y;
+
+	rad.p2.pos_x = players[1].pos_x;
+	rad.p2.pos_y = players[1].pos_y;
+
+	for(int i = 0; i < max_move; i++) {
+		if(crt_move != i) {
+			i = crt_move;
+		}
+		calc_arbore(rad, board, N, M, 0);
+		players[0] = get_movement(rad);
+	}
+
+	
+
 	return 0;
 }
 
