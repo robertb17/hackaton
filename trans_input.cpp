@@ -22,7 +22,6 @@ int get_new_int(char* s, int l)
 {
 	//asumming little endian
 	char* p = s + l - 1;
-	// return p;
 	int val = 0;
 	for(int i = 0; i <= 3; i++) {
 		val += (int)(*((p - i))) * pow(2,8 * (3 - i));
@@ -67,27 +66,22 @@ game_board** trans_input(char* s, player* players, int N, int M)
 	for(int i = 0; i < N; i++) {
 		board[i] = (game_board*) malloc(sizeof(game_board) * M);
 		for(int j = 0; j < M; j++) {
-			char* pp = get_new_char(s);
-			s++;
+			char* pp = s;
+			pp++;
 
 			if(*pp != 0) {
 				printf("%d %d\n", i, j);
 				handle_player(players, pp, i, j);
 			}
-			pp = get_new_char(s); 
-			s++;
+			pp++;
+			memcpy(board[i][j].is_wall, pp, sizeof(char));
 
-			board[i][j].is_wall = *pp;
-			// board[i][j].danger_level = 0;
+			pp++;
+			memcpy(board[i][j].on_fire, pp, sizeof(char));
 
-			pp = get_new_char(s); 
-			s++;
-			board[i][j].on_fire = *pp;
+			pp++;
+			memcpy(board[i][j].bomb_time_left, pp, sizeof(char))	
 
-			pp = get_new_char(s); 
-			s++;
-
-			board[i][j].time_left_bomb = *pp;	
 			//printf("%d %d: %d %d %d\n", i, j, (int)board[i][j].is_wall, board[i][j].on_fire, board[i][j].has_bomb);	
 		}
 	}
