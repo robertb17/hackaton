@@ -237,23 +237,23 @@ int get_movement(nod *n)
 	int dif_row = n->v_nod[index]->p1.pos_x - n->p1.pos_x;	
 	int dif_col = n->v_nod[index]->p1.pos_y - n->p1.pos_y;
 
-	int res = 0;
+	unsigned int res = 0;
 	if(dif_row > 0) {
 		// res += 0x20000000;
-		res += 1;
+		res = 1 << 31;
 	} else if(dif_row < 0) {
 		// res += 0x60000000;
-		res += 3;
+		res = 3 << 30;
 	} else if(dif_col > 0) {
 		// res += 0x40000000;
-		res += 2;
+		res = 1 << 30;
 	} else if(dif_col < 0) {
 		// res += 0x80000000;
-		res += 4;
+		res = 1 << 29;
 	}
 
 	if(n->plant_bomb == true) {
-		res += 8;
+		res = res | 1;
 		// res += 0x80000000;
 	}	
 
