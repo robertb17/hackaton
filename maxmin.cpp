@@ -1,6 +1,6 @@
 #include "data_str.h"
 #include <stdlib.h>
-
+#include <cstring>
 #define INF 100
 
 
