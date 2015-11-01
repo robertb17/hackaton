@@ -165,10 +165,12 @@ void calc_arbore(nod* n_crt, game_board** board, int N, int M, int pas)
 
 				if(is_possible(new_board, n->p1.pos_x, n->p1.pos_y, N, M) &&
 				   is_possible(new_board, n->p2.pos_x, n->p2.pos_y, N, M)) {
-					//fprintf(stderr, "true\n");
+
 					n_crt->v_nod.push_back(n);
+					//plants bomb
 					if(mov[i][4] == 1){
 						new_board[n_crt->p1.pos_x][n_crt->p1.pos_y].time_left_bomb = 10;
+						n->plant_bomb = true;
 					}
 					if(mov[j][4] == 1){
 						new_board[n_crt->p2.pos_x][n_crt->p2.pos_y].time_left_bomb = 10;
@@ -215,29 +217,41 @@ void calc_arbore(nod* n_crt, game_board** board, int N, int M, int pas)
 }
 
 /*returneaza mutarea cea mai eficienta*/
-player get_movement(nod *n)
+int get_movement(nod *n)
 {
-
-	if(n->v_nod.size()){
-		int index = 0;
-		int max_eff1 = n->v_nod[0]->eff1;
-		int min_eff2 = n->v_nod[0]->eff2;
-		for(size_t i = 1; i < n->v_nod.size(); i++) {
-			if(max_eff1 < n->v_nod[i]->eff1) {
-				max_eff1 = n->v_nod[i]->eff1;
+	int index = 0;
+	int max_eff1 = n->v_nod[0]->eff1;
+	int min_eff2 = n->v_nod[0]->eff2;
+	for(size_t i = 1; i < n->v_nod.size(); i++) {
+		if(max_eff1 < n->v_nod[i]->eff1) {
+			max_eff1 = n->v_nod[i]->eff1;
+			index = i;
+			min_eff2 = n->v_nod[i]->eff2;
+		} else if (max_eff1 == n->v_nod[i]->eff1) {
+			if(min_eff2 < n->v_nod[i]->eff2) {
 				index = i;
 				min_eff2 = n->v_nod[i]->eff2;
-			} else if (max_eff1 == n->v_nod[i]->eff1) {
-				if(min_eff2 < n->v_nod[i]->eff2) {
-					index = i;
-					min_eff2 = n->v_nod[i]->eff2;
-				}
 			}
 		}
-
-		return n->v_nod[index]->p1;	
 	}
-	
-	return n->p1;
+	int dif_row = n->v_nod[index]->p1.pos_x - n->p1.pos_x;	
+	int dif_col = n->v_nod[index]->p1.pos_y - n->p1.pos_y;
+
+	int res = 0;
+	if(dif_row > 0) {
+		res += 1;
+	} else if(dif_row < 0) {
+		res += 3;
+	} else if(dif_col > 0) {
+		res += 2;
+	} else if(dif_col < 0) {
+		res += 4;
+	}
+
+	if(n->plant_bomb == true) {
+		res += 0x80000000;
+	}	
+
+	return res;
 }
 

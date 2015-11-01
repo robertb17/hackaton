@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 
 	n = read(sockfd, buffer, N * M * 4);
 	player players[2];
-	game_board **board = trans_input(buffer, players, N, M);
+	game_board **board = trans_input(buffer, players, N, M, id_player);
 
 	FILE * fout = fopen("matr.out", "w");
 	for(int i = 0; i < N; i++) {
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 			i = crt_move;
 		}
 		calc_arbore(&rad, board, M, N, 0);
-		players[0] = get_movement(&rad);
+		int next_move = get_movement(&rad);
 	}
 
 	
