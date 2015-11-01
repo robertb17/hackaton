@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[]) {
 
-	int sockfd, portno, n;
+	int sockfd, portno, n = 1;
 	char buffer[4300];
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
@@ -49,30 +49,31 @@ int main(int argc, char *argv[]) {
 
 	n = read(sockfd, buffer, 4);
 	int id_player = *((unsigned int*)buffer); // id-ul jucatorului
-
-	n = read(sockfd, buffer, 20);
-
-	is_aggressive = get_info(buffer, crt_move, max_move, aggressive, N, M);
-
-
-	n = read(sockfd, buffer, N * M * 4);
-	player players[2];
-	game_board **board = trans_input(buffer, players, N, M, id_player);
-
-	nod rad;
-	rad.p1.pos_x = players[0].pos_x;
-	rad.p1.pos_y = players[0].pos_y;
-
-	rad.p2.pos_x = players[1].pos_x;
-	rad.p2.pos_y = players[1].pos_y;
-
-	calc_arbore(&rad, board, M, N, 0);
-	int next_move = get_movement(&rad);
-		
-	int64_t val = 0;
-	n = write(sockfd, &val, 8);
-
 	
+	while( n > 0){
+ 		n = read(sockfd, buffer, 20);
+
+		is_aggressive = get_info(buffer, crt_move, max_move, aggressive, N, M);
+
+		n = read(sockfd, buffer, N * M * 4);
+		player players[2];
+		game_board **board = trans_input(buffer, players, N, M, id_player);
+
+		nod rad;
+		rad.p1.pos_x = players[0].pos_x;
+		rad.p1.pos_y = players[0].pos_y;
+
+		rad.p2.pos_x = players[1].pos_x;
+		rad.p2.pos_y = players[1].pos_y;
+
+		calc_arbore(&rad, board, M, N, 0);
+		//int next_move = get_movement(&rad);
+		
+		int64_t val = 0;//crt_move << 32 + next_move;
+		//printf("%lu", val);
+		n = write(sockfd, &val, 8);
+		
+	}
 
 	return 0;
 }
