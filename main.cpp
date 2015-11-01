@@ -59,13 +59,13 @@ int main(int argc, char *argv[]) {
 	player players[2];
 	game_board **board = trans_input(buffer, players, N, M, id_player);
 
-	FILE * fout = fopen("matr.out", "w");
+/*	FILE * fout = fopen("matr.out", "w");
 	for(int i = 0; i < N; i++) {
 		for(int j = 0; j < M; j++)
 			fprintf(fout, "%d ", board[i][j].is_wall);
 		fprintf(fout, "\n");
 	}
-	fclose(fout);
+	fclose(fout);*/
 
 	nod rad;
 	rad.p1.pos_x = players[0].pos_x;
@@ -76,12 +76,15 @@ int main(int argc, char *argv[]) {
 
 	for(int i = 0; i < max_move; i++) {
 
-		fprintf(stderr, "%d\n", i);
+//		fprintf(stderr, "%d\n", i);
 		if(crt_move != i) {
 			i = crt_move;
 		}
 		calc_arbore(&rad, board, M, N, 0);
 		int next_move = get_movement(&rad);
+		sprintf(buffer, "%d%d", crt_move, next_move);
+
+		write(sockfd, buffer, 8);
 	}
 
 	

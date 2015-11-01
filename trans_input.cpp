@@ -65,7 +65,7 @@ game_board** trans_input(char* s, player* players, int N, int M, int id_player)
 	//		pp++;
 			
 			if(*pp != 0) {
-	//			printf("%d %d\n", i, j);
+	//			//printf("%d %d\n", i, j);
 				handle_player(players, pp, i, j, id_player);
 			}
 

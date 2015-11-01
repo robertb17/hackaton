@@ -187,7 +187,7 @@ void calc_arbore(nod* n_crt, game_board** board, int N, int M, int pas)
  
 		//solve nodes
 		for(size_t i = 0; i < n_crt->v_nod.size(); i++) {
-			fprintf(stderr, "%lu %lu \n", i, n_crt->v_nod.size());
+			//fprintf(stderr, "%lu %lu \n", i, n_crt->v_nod.size());
 			calc_arbore(n_crt->v_nod[i], new_board, N, M, pas + 1);
 		
 		}
