@@ -30,20 +30,13 @@ int get_new_int(char* s, int l)
 
 }
 
-char* get_new_char(char* s)
-{
-	//asumming little endian
-	char* p = s;
-	return p;
-}
-
 bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, int& M)
 {
-	printf("%s\n", s);
+	//printf("%s\n", s);
 	int p = get_new_int(s, 20);
 	N = p;
 
-	printf("%s\n", s);
+	//printf("%s\n", s);
 	
 	p = get_new_int(s, 16);
 	M = p;
@@ -63,14 +56,15 @@ bool get_info(char* s, int& crt_move, int& max_move, int& aggressive, int& N, in
 game_board** trans_input(char* s, player* players, int N, int M)
 {
 	game_board** board = (game_board**) malloc(sizeof(game_board*) * N);
+	char* pp = s;
 	for(int i = 0; i < N; i++) {
 		board[i] = (game_board*) malloc(sizeof(game_board) * M);
 		for(int j = 0; j < M; j++) {
-			char* pp = s;
-			pp++;
+	//		char* pp = s;
+	//		pp++;
 
 			if(*pp != 0) {
-				printf("%d %d\n", i, j);
+	//			printf("%d %d\n", i, j);
 				handle_player(players, pp, i, j);
 			}
 			pp++;
@@ -85,8 +79,8 @@ game_board** trans_input(char* s, player* players, int N, int M)
 
 			pp++;
 			memcpy(&board[i][j].time_left_bomb, pp, sizeof(char));
-
-			//printf("%d %d: %d %d %d\n", i, j, (int)board[i][j].is_wall, board[i][j].on_fire, board[i][j].has_bomb);	
+			pp++;
+			printf("%d %d: %d %d %d\n", i, j, (int)board[i][j].is_wall, board[i][j].on_fire, board[i][j].time_left_bomb);
 		}
 	}
 
