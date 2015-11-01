@@ -74,13 +74,13 @@ game_board** trans_input(char* s, player* players, int N, int M)
 				handle_player(players, pp, i, j);
 			}
 			pp++;
-			memcpy(board[i][j].is_wall, pp, sizeof(char));
+			memcpy(&board[i][j].is_wall, pp, sizeof(char));
 
 			pp++;
-			memcpy(board[i][j].on_fire, pp, sizeof(char));
+			memcpy(&board[i][j].on_fire, pp, sizeof(char));
 
 			pp++;
-			memcpy(board[i][j].bomb_time_left, pp, sizeof(char))	
+			memcpy(&board[i][j].time_left_bomb, pp, sizeof(char));
 
 			//printf("%d %d: %d %d %d\n", i, j, (int)board[i][j].is_wall, board[i][j].on_fire, board[i][j].has_bomb);	
 		}
