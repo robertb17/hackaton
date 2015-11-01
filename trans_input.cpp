@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
 void handle_player(player* x, char* p, int i, int j)
 {
