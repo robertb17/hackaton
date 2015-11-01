@@ -239,24 +239,23 @@ int get_movement(nod *n)
 
 	int res = 0;
 	if(dif_row > 0) {
-		res += 0x20000000;
-		//res += 1;
+		// res += 0x20000000;
+		res += 1;
 	} else if(dif_row < 0) {
-		res += 0x60000000;
-		// res += 3;
+		// res += 0x60000000;
+		res += 3;
 	} else if(dif_col > 0) {
-		res += 0x40000000;
-		// res += 2;
+		// res += 0x40000000;
+		res += 2;
 	} else if(dif_col < 0) {
-		res += 0x80000000;
-		// res += 4;
+		// res += 0x80000000;
+		res += 4;
 	}
 
 	if(n->plant_bomb == true) {
-		res += 1;
+		res += 8;
 		// res += 0x80000000;
 	}	
 
 	return res;
 }
-
